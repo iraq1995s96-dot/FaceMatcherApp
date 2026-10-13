@@ -16,20 +16,22 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (list) Application requirements
-# تأكدنا من تضمين بايثون، ومكتبة kivy، والمكتبات الثقيلة المطلوبة للتعرف على الوجوه
 requirements = python3,kivy,pillow
+
 # (str) Supported orientation (landscape, portrait or all)
 orientation = portrait
 
 # (list) Permissions
-# إذن الكاميرا وقراءة التخزين ضروريان لتطبيق التعرف على الوجوه
 android.permissions = CAMERA,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
 # (int) Target Android API, should be as high as possible.
-android.api = 31
+android.api = 33
 
 # (int) Minimum API your APK will support.
 android.minAPI = 21
+
+# (list) Supported architectures
+android.architectures = arm64-v8a, armeabi-v7a
 
 # (str) Android APK versioning
 version = 0.1
