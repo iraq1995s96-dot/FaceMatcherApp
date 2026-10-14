@@ -33,5 +33,11 @@ android.minAPI = 21
 # (list) Supported architectures
 android.architectures = arm64-v8a, armeabi-v7a
 
+# (str) Accept Android SDK license automatically
+android.accept_sdk_license = True
+
+# (str) Android NDK version
+android.ndk = 25b
+
 # (str) Android APK versioning
 version = 0.1
