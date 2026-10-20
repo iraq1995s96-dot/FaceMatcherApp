@@ -34,7 +34,6 @@ jobs:
         sudo apt-get update
         export DEBIAN_FRONTEND=noninteractive
         
-        # تمت إضافة automake و libltdl-dev لحل مشكلة autoconf
         sudo -E apt-get install -y --no-install-recommends \
           git zip unzip openjdk-17-jdk python3-pip \
           autoconf automake libtool libltdl-dev pkg-config zlib1g-dev \
@@ -53,7 +52,8 @@ jobs:
 
     - name: Build with Buildozer
       run: |
-        buildozer -v android debug
+        # أمر yes | سيقوم بالضغط على Y تلقائياً للموافقة على التراخيص
+        yes | buildozer -v android debug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
