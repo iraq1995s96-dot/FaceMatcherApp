@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    # هذا السطر يعالج مشكلة التحديث الجديد في GitHub
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
 
@@ -50,16 +51,14 @@ jobs:
         rm -rf ~/.buildozer
         rm -rf .buildozer
 
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
     - name: Accept Android Licenses
       run: |
-        # استخدام الـ SDK المثبت مسبقاً في سيرفرات GitHub
-        yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        yes | sdkmanager --licenses || true
 
     - name: Build with Buildozer
-      env:
-        # إجبار Buildozer على استخدام الـ SDK الجاهز
-        ANDROID_HOME: /usr/local/lib/android/sdk
-        ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
       run: |
         buildozer -v android debug
 
