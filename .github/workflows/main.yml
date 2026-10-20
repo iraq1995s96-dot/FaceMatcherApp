@@ -29,11 +29,26 @@ jobs:
     - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-        pip install --upgrade buildozer cython virtualenv
+        
+        # هذا السطر يمنع النظام من التوقف وانتظار موافقة (Y/n) وبالتالي يمنع التعليق
+        export DEBIAN_FRONTEND=noninteractive
+        
+        sudo -E apt-get install -y --no-install-recommends \
+          git zip unzip openjdk-17-jdk python3-pip \
+          autoconf libtool pkg-config zlib1g-dev \
+          libncurses5-dev libncursesw5-dev cmake \
+          libffi-dev libssl-dev lib32z1 lib32ncurses6 lib32stdc++6
+        
+        # محاولة تثبيت libtinfo5، وإذا فشلت يكمل البناء بدون توقف
+        sudo -E apt-get install -y libtinfo5 || true
+        
+        # تثبيت Buildozer وإصدار مستقر من Cython
+        pip install --upgrade pip
+        pip install buildozer cython==0.29.36 virtualenv
 
-    - name: Clear Buildozer Cache (هام جداً)
+    - name: Clear Buildozer Cache
       run: |
+        # مسح الكاش لمنع الأخطاء المتكررة من المحاولات السابقة
         rm -rf ~/.buildozer
         rm -rf .buildozer
 
@@ -42,10 +57,12 @@ jobs:
 
     - name: Accept Android Licenses
       run: |
+        # قبول تراخيص جوجل تلقائياً
         yes | sdkmanager --licenses || true
 
     - name: Build with Buildozer
       run: |
+        # تشغيل البناء مع طباعة تفاصيل الأخطاء
         buildozer -v android debug
 
     - name: Upload APK Artifact
