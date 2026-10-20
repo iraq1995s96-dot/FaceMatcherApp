@@ -36,7 +36,10 @@ android.architectures = arm64-v8a
 # (str) Accept Android SDK license automatically
 android.accept_sdk_license = True
 
-# (str) Android NDK version
+# قبول تراخيص الأندرويد تلقائياً
+android.accept_sdk_license = True
+
+# تحديد إصدار الـ NDK لتجنب التعارض
 android.ndk = 25b
 
 # (str) Android APK versioning
