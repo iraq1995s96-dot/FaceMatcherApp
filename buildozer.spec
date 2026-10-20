@@ -41,7 +41,7 @@ version = 1.0
 # [تعديل هام جداً] أضف هنا كل المكتبات التي يستخدمها تطبيقك
 # إذا كنت تستخدم KivyMD أضف ,kivymd,pillow
 # إذا كنت تستخدم requests أضف ,requests
-requirements = python3,kivy
+requirements = python3,kivy,kivymd,pillow
 
 # (str) Application icon
 # icon.filename = %(source.dir)s/data/icon.png
