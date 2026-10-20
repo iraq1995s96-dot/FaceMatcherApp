@@ -5,11 +5,15 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
-  workflow_dispatch: # يسمح لك بتشغيل البناء يدوياً من صفحة GitHub
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # هذا السطر هو الحل: يجبر الأدوات على استخدام Node 20 بدلاً من 24
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
 
     steps:
     - name: Checkout code
@@ -18,19 +22,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10' # إصدار مستقر جداً مع Buildozer
+        python-version: '3.10'
 
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '17' # ضروري جداً لإصدارات Android SDK الحديثة
+        java-version: '17'
 
     - name: Install System Dependencies
       run: |
         sudo apt-get update
-        
-        # هذا السطر يمنع النظام من التوقف وانتظار موافقة (Y/n) وبالتالي يمنع التعليق
         export DEBIAN_FRONTEND=noninteractive
         
         sudo -E apt-get install -y --no-install-recommends \
@@ -39,16 +41,13 @@ jobs:
           libncurses5-dev libncursesw5-dev cmake \
           libffi-dev libssl-dev lib32z1 lib32ncurses6 lib32stdc++6
         
-        # محاولة تثبيت libtinfo5، وإذا فشلت يكمل البناء بدون توقف
         sudo -E apt-get install -y libtinfo5 || true
         
-        # تثبيت Buildozer وإصدار مستقر من Cython
         pip install --upgrade pip
         pip install buildozer cython==0.29.36 virtualenv
 
     - name: Clear Buildozer Cache
       run: |
-        # مسح الكاش لمنع الأخطاء المتكررة من المحاولات السابقة
         rm -rf ~/.buildozer
         rm -rf .buildozer
 
@@ -57,12 +56,10 @@ jobs:
 
     - name: Accept Android Licenses
       run: |
-        # قبول تراخيص جوجل تلقائياً
         yes | sdkmanager --licenses || true
 
     - name: Build with Buildozer
       run: |
-        # تشغيل البناء مع طباعة تفاصيل الأخطاء
         buildozer -v android debug
 
     - name: Upload APK Artifact
