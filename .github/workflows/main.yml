@@ -34,16 +34,17 @@ jobs:
         sudo apt-get update
         export DEBIAN_FRONTEND=noninteractive
         
+        # تمت إضافة automake و libltdl-dev لحل مشكلة autoconf
         sudo -E apt-get install -y --no-install-recommends \
           git zip unzip openjdk-17-jdk python3-pip \
-          autoconf libtool pkg-config zlib1g-dev \
+          autoconf automake libtool libltdl-dev pkg-config zlib1g-dev \
           libncurses5-dev libncursesw5-dev cmake \
           libffi-dev libssl-dev lib32z1 lib32ncurses6 lib32stdc++6
         
         sudo -E apt-get install -y libtinfo5 || true
         
         pip install --upgrade pip
-        pip install buildozer cython==0.29.36 virtualenv
+        pip install buildozer virtualenv
 
     - name: Clear Buildozer Cache
       run: |
@@ -52,7 +53,6 @@ jobs:
 
     - name: Build with Buildozer
       run: |
-        # Buildozer الآن سيقوم بتحميل الـ SDK و NDK بنفسه
         buildozer -v android debug
 
     - name: Upload APK Artifact
